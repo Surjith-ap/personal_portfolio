@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
-from flask_mail import Message as MailMessage
-from app import db, mail
+import smtplib
+from email.message import EmailMessage
+
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
+from app import db
 from app.models import Project, Skill, Message
 
 main_bp = Blueprint("main", __name__)
@@ -65,18 +67,27 @@ def contact():
         db.session.add(msg)
         db.session.commit()
 
-        # Send email notification
+        # Send email notification with a short timeout so the request cannot hang.
         try:
-            email_msg = MailMessage(
-                subject=f"[Portfolio] {subject}",
-                recipients=["surjith.ap007@gmail.com"],
-                body=f"From: {name} <{email}>\n\n{body}",
-                reply_to=email,
-            )
-            mail.send(email_msg)
-        except Exception:
-            # Email failure is non-fatal; message is already in DB
-            pass
+            smtp_username = current_app.config.get("MAIL_USERNAME")
+            smtp_password = current_app.config.get("MAIL_PASSWORD")
+            mail_enabled = bool(smtp_username and smtp_password)
+
+            if mail_enabled:
+                email_msg = EmailMessage()
+                email_msg["Subject"] = f"[Portfolio] {subject}"
+                email_msg["From"] = current_app.config.get("MAIL_DEFAULT_SENDER") or smtp_username
+                email_msg["To"] = "surjith.ap007@gmail.com"
+                email_msg["Reply-To"] = email
+                email_msg.set_content(f"From: {name} <{email}>\n\n{body}")
+
+                with smtplib.SMTP("smtp.gmail.com", 587, timeout=8) as smtp:
+                    smtp.starttls()
+                    smtp.login(smtp_username, smtp_password)
+                    smtp.send_message(email_msg)
+        except Exception as exc:
+            # Email failure is non-fatal; message is already in DB.
+            current_app.logger.warning("Contact email send failed: %s", exc)
 
         flash("Message sent! I'll get back to you soon.", "success")
         return redirect(url_for("main.contact"))
