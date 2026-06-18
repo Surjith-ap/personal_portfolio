@@ -1,0 +1,51 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}{{ 'Edit' if skill else 'New' }} Skill — Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>{{ 'Edit Skill' if skill else 'New Skill' }}</h1>
+  <a href="{{ url_for('admin.dashboard') }}" class="btn btn--outline btn--sm">← Back</a>
+</div>
+
+<div class="admin-form-card">
+  <form method="POST">
+
+    <div class="form-group">
+      <label for="name">Skill Name <span class="req">*</span></label>
+      <input type="text" id="name" name="name" required
+             placeholder="e.g. Flask"
+             value="{{ skill.name if skill else '' }}" />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category <span class="req">*</span></label>
+      <select id="category" name="category">
+        {% for cat in ['Language', 'Framework', 'Library', 'Tool', 'Concept', 'Cloud & AI'] %}
+          <option value="{{ cat }}" {% if skill and skill.category == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="level">Proficiency Level: <span id="level-display">{{ skill.level if skill else 80 }}%</span></label>
+      <input type="range" id="level" name="level" min="0" max="100"
+             value="{{ skill.level if skill else 80 }}"
+             oninput="document.getElementById('level-display').textContent = this.value + '%'" />
+    </div>
+
+    <div class="form-group">
+      <label for="order">Display Order</label>
+      <input type="number" id="order" name="order" min="0"
+             value="{{ skill.order if skill else 0 }}" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary">
+        {{ 'Update Skill' if skill else 'Add Skill' }}
+      </button>
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn--outline">Cancel</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

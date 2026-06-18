@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Projects — Surjith A P{% endblock %}
+
+{% block head_extra %}
+  <!-- Mermaid loaded only on this page -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      mermaid.initialize({ startOnLoad: true, theme: "base",
+        themeVariables: {
+          primaryColor: "#EEF0FB",
+          primaryTextColor: "#1A1A2E",
+          primaryBorderColor: "#5C6AC4",
+          lineColor: "#5C6AC4",
+          fontFamily: "Inter, sans-serif"
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Page Hero ───────────────────────────────────────────────────────── -->
+<section class="page-hero section-pad">
+  <div class="container">
+    <p class="hero__eyebrow reveal-up">What I've built</p>
+    <h1 class="page-hero__title reveal-up">Projects</h1>
+    <p class="page-hero__sub reveal-up">
+      Each project below includes an architecture diagram, backend metrics,
+      and API endpoint reference — because backend work deserves more than a bullet point.
+    </p>
+  </div>
+</section>
+
+<!-- ── Project Cards ───────────────────────────────────────────────────── -->
+{% for p in projects %}
+<section class="project-detail section-pad {% if loop.index is even %}bg-soft{% endif %}" id="project-{{ p.id }}">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="project-detail__header reveal-up">
+      <div>
+        <h2 class="project-detail__title">{{ p.title }}</h2>
+        {% if p.role %}
+          <p class="project-detail__role">{{ p.role }}</p>
+        {% endif %}
+      </div>
+      <div class="project-detail__actions">
+        {% if p.github_url %}
+          <a href="{{ p.github_url }}" class="btn btn--outline btn--sm" target="_blank" rel="noopener">GitHub ↗</a>
+        {% endif %}
+        {% if p.live_url %}
+          <a href="{{ p.live_url }}" class="btn btn--primary btn--sm" target="_blank" rel="noopener">Live Demo ↗</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Tech tags -->
+    <div class="project-detail__tags reveal-up">
+      {% for tech in p.tech_stack %}
+        <span class="tag">{{ tech }}</span>
+      {% endfor %}
+    </div>
+
+    <!-- Description -->
+    <p class="project-detail__desc reveal-up">{{ p.description }}</p>
+
+    <!-- Two-column: diagram + metrics -->
+    <div class="detail-two-col">
+
+      <!-- Architecture Diagram -->
+      {% if p.mermaid_diagram %}
+      <div class="detail-col reveal-up">
+        <h3 class="detail-col__title">
+          <span class="detail-col__icon">🏗</span> Architecture
+        </h3>
+        <div class="mermaid-wrap">
+          <pre class="mermaid">{{ p.mermaid_diagram }}</pre>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Backend Metrics -->
+      {% if p.backend_metrics %}
+      <div class="detail-col reveal-up">
+        <h3 class="detail-col__title">
+          <span class="detail-col__icon">⚡</span> Backend Metrics
+        </h3>
+        <div class="metrics-block">
+          {% for line in p.backend_metrics.split('.') %}
+            {% if line.strip() %}
+            <div class="metric-row">
+              <span class="metric-row__dot"></span>
+              <p>{{ line.strip() }}.</p>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- API Endpoints -->
+    {% if p.api_endpoints %}
+    <div class="reveal-up api-section">
+      <h3 class="detail-col__title">
+        <span class="detail-col__icon">🔌</span> API Endpoints
+      </h3>
+      <div class="endpoint-table-wrap">
+        <table class="endpoint-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ep in p.api_endpoints %}
+            <tr>
+              <td><span class="method method--{{ ep.method | lower }}">{{ ep.method }}</span></td>
+              <td><code class="endpoint-path">{{ ep.path }}</code></td>
+              <td>{{ ep.desc }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% else %}
+<section class="section-pad">
+  <div class="container center-cta">
+    <p>No projects yet — check back soon.</p>
+  </div>
+</section>
+{% endfor %}
+
+{% endblock %}

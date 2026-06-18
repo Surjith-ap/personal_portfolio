@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}About — Surjith A P{% endblock %}
+
+{% block content %}
+
+<!-- ── About Hero ──────────────────────────────────────────────────────── -->
+<section class="page-hero section-pad">
+  <div class="container">
+    <p class="hero__eyebrow reveal-up">Get to know me</p>
+    <h1 class="page-hero__title reveal-up">About Me</h1>
+  </div>
+</section>
+
+
+<!-- ── Bio ─────────────────────────────────────────────────────────────── -->
+<section class="section-pad">
+  <div class="container bio-grid">
+    <div class="bio-grid__text reveal-up">
+      <h2 class="section-title">Who I Am</h2>
+      <p>
+        I'm a final-year Computer Science student at Government College of Engineering Kannur,
+        passionate about building backend systems that are clean, fast, and maintainable.
+        My work centres on <strong>Python, Flask, and REST API design</strong> — from
+        architecting database schemas to wiring AI microservices.
+      </p>
+      <p>
+        I've won a national-level hackathon, completed a cybersecurity internship at C-DAC Noida,
+        and earned certifications in Python (Meta), Machine Learning (IBM), and
+        Generative AI (Oracle Cloud). I'm now actively looking for backend and AI engineering roles.
+      </p>
+    </div>
+    <div class="bio-grid__meta reveal-up">
+      <div class="meta-card">
+        <span class="meta-card__label">Location</span>
+        <span class="meta-card__value">Kerala, India</span>
+      </div>
+      <div class="meta-card">
+        <span class="meta-card__label">Degree</span>
+        <span class="meta-card__value">B.Tech CSE · GCE Kannur</span>
+      </div>
+      <div class="meta-card">
+        <span class="meta-card__label">Focus</span>
+        <span class="meta-card__value">Backend · AI Engineering</span>
+      </div>
+      <div class="meta-card">
+        <span class="meta-card__label">Email</span>
+        <span class="meta-card__value">
+          <a href="mailto:surjith.ap007@gmail.com">surjith.ap007@gmail.com</a>
+        </span>
+      </div>
+      <div class="meta-card">
+        <span class="meta-card__label">Status</span>
+        <span class="meta-card__value status-open">Open to Opportunities</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Skills Grid ─────────────────────────────────────────────────────── -->
+<section class="section-pad bg-soft">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <h2 class="section-title">Skills</h2>
+    </div>
+    <div class="skills-categories">
+      {% for category, skills in skill_groups.items() %}
+      <div class="skill-category reveal-up">
+        <h3 class="skill-category__title">{{ category }}</h3>
+        <div class="skill-list">
+          {% for skill in skills %}
+          <div class="skill-item">
+            <div class="skill-item__header">
+              <span class="skill-item__name">{{ skill.name }}</span>
+              <span class="skill-item__pct">{{ skill.level }}%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar__fill" style="--fill: {{ skill.level }}%"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Timeline ─────────────────────────────────────────────────────────── -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <h2 class="section-title">Experience &amp; Education</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline__item reveal-up">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <span class="timeline__date">Jul 2024 – Sep 2024</span>
+          <h3 class="timeline__title">Ethical Hacking &amp; Penetration Testing Intern</h3>
+          <p class="timeline__org">Centre for Development of Advanced Computing (C-DAC) · Noida (Remote)</p>
+          <ul class="timeline__points">
+            <li>Executed vulnerability assessment and penetration testing on sample network environments.</li>
+            <li>Developed a Ransomware Simulation Tool in Python to test and analyse system defence capabilities.</li>
+            <li>Explored threat analysis, exploit techniques, and security best practices.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline__item reveal-up">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <span class="timeline__date">Oct 2022 – Sep 2025</span>
+          <h3 class="timeline__title">B.Tech in Computer Science &amp; Engineering</h3>
+          <p class="timeline__org">Government College of Engineering Kannur · CGPA 6.42</p>
+          <ul class="timeline__points">
+            <li>Convenor, Technical Committee — Xplore24 National Level Multifest 2025.</li>
+            <li>Winner — Karthavya 2.0 National Level Hackathon.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline__item reveal-up">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <span class="timeline__date">Apr 2018 – Oct 2021</span>
+          <h3 class="timeline__title">Diploma in Computer Hardware Engineering</h3>
+          <p class="timeline__org">Government Polytechnic College Palakkad · CGPA 7.44</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Achievements & Certs ───────────────────────────────────────────── -->
+<section class="section-pad bg-soft">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <h2 class="section-title">Achievements &amp; Certifications</h2>
+    </div>
+    <div class="two-col-grid">
+
+      <!-- Achievements -->
+      <div class="reveal-up">
+        <h3 class="subsection-title">🏆 Achievements</h3>
+        <div class="achievement-card">
+          <strong>Karthavya 2.0 National Level Hackathon — Winner</strong>
+          <p>Built an E-Waste Management system with Gemini AI integration. Competed against teams nationwide.</p>
+        </div>
+        <div class="achievement-card">
+          <strong>Convenor, Technical Committee — Xplore24</strong>
+          <p>Led the technical team for a 3-day National Level Multi-Fest, overseeing event execution and team coordination.</p>
+        </div>
+      </div>
+
+      <!-- Certs -->
+      <div class="reveal-up">
+        <h3 class="subsection-title">📜 Certifications</h3>
+        <div class="cert-card">
+          <span class="cert-card__issuer">Meta</span>
+          <span class="cert-card__name">Programming in Python</span>
+        </div>
+        <div class="cert-card">
+          <span class="cert-card__issuer">IBM</span>
+          <span class="cert-card__name">Machine Learning with Python</span>
+        </div>
+        <div class="cert-card">
+          <span class="cert-card__issuer">Oracle</span>
+          <span class="cert-card__name">Oracle Cloud Infrastructure 2025 — Certified Generative AI Professional</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

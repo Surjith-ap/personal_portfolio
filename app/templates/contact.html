@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Contact — Surjith A P{% endblock %}
+
+{% block content %}
+
+<section class="page-hero section-pad">
+  <div class="container">
+    <p class="hero__eyebrow reveal-up">Get in touch</p>
+    <h1 class="page-hero__title reveal-up">Contact</h1>
+    <p class="page-hero__sub reveal-up">
+      Open to backend / AI engineering roles, freelance projects, and interesting conversations.
+    </p>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container contact-grid">
+
+    <!-- Form -->
+    <div class="contact-form-wrap reveal-up">
+      <form class="contact-form" id="contact-form" method="POST" action="{{ url_for('main.contact') }}" novalidate>
+        <div class="form-group">
+          <label for="name">Name <span class="req">*</span></label>
+          <input type="text" id="name" name="name" placeholder="Your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="What's this about?" />
+        </div>
+        <div class="form-group">
+          <label for="body">Message <span class="req">*</span></label>
+          <textarea id="body" name="body" rows="6" placeholder="Write your message here…" required></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full" id="submit-btn">
+          <span class="btn__label">Send Message</span>
+          <span class="btn__loading" hidden>Sending…</span>
+        </button>
+      </form>
+      <div id="form-feedback" class="form-feedback" hidden></div>
+    </div>
+
+    <!-- Info panel -->
+    <div class="contact-info reveal-up">
+      <div class="contact-info__item">
+        <span class="contact-info__icon">📧</span>
+        <div>
+          <p class="contact-info__label">Email</p>
+          <a href="mailto:surjith.ap007@gmail.com" class="contact-info__value">surjith.ap007@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-info__item">
+        <span class="contact-info__icon">📍</span>
+        <div>
+          <p class="contact-info__label">Location</p>
+          <p class="contact-info__value">Kerala, India</p>
+        </div>
+      </div>
+      <div class="contact-info__item">
+        <span class="contact-info__icon">💼</span>
+        <div>
+          <p class="contact-info__label">LinkedIn</p>
+          <a href="https://linkedin.com/in/surjithap" target="_blank" rel="noopener" class="contact-info__value">linkedin.com/in/surjithap</a>
+        </div>
+      </div>
+      <div class="contact-info__item">
+        <span class="contact-info__icon">🐙</span>
+        <div>
+          <p class="contact-info__label">GitHub</p>
+          <a href="https://github.com/surjithap" target="_blank" rel="noopener" class="contact-info__value">github.com/surjithap</a>
+        </div>
+      </div>
+      <div class="contact-info__availability">
+        <span class="status-dot"></span>
+        Available for opportunities from September 2025
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts_extra %}
+<script src="{{ url_for('static', filename='js/contact.js') }}" defer></script>
+{% endblock %}

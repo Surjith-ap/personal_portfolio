@@ -1,0 +1,126 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Dashboard — Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Dashboard</h1>
+  <div class="admin-header-actions">
+    <a href="{{ url_for('admin.new_project') }}" class="btn btn--primary btn--sm">+ New Project</a>
+    <a href="{{ url_for('admin.new_skill') }}" class="btn btn--outline btn--sm">+ New Skill</a>
+  </div>
+</div>
+
+<!-- Stats row -->
+<div class="admin-stats">
+  <div class="admin-stat">
+    <span class="admin-stat__n">{{ projects|length }}</span>
+    <span class="admin-stat__l">Projects</span>
+  </div>
+  <div class="admin-stat">
+    <span class="admin-stat__n">{{ skills|length }}</span>
+    <span class="admin-stat__l">Skills</span>
+  </div>
+  <div class="admin-stat">
+    <span class="admin-stat__n">{{ unread }}</span>
+    <span class="admin-stat__l">Unread Messages</span>
+  </div>
+</div>
+
+<!-- Projects table -->
+<section class="admin-section">
+  <h2>Projects</h2>
+  {% if projects %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>#</th><th>Title</th><th>Featured</th><th>Order</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in projects %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.title }}</td>
+          <td>{% if p.is_featured %}<span class="badge badge--green">Yes</span>{% else %}<span class="badge">No</span>{% endif %}</td>
+          <td>{{ p.order }}</td>
+          <td class="admin-table__actions">
+            <a href="{{ url_for('admin.edit_project', pid=p.id) }}" class="btn btn--outline btn--xs">Edit</a>
+            <form method="POST" action="{{ url_for('admin.delete_project', pid=p.id) }}" onsubmit="return confirm('Delete this project?');" style="display:inline;">
+              <button type="submit" class="btn btn--danger btn--xs">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="admin-empty">No projects yet. <a href="{{ url_for('admin.new_project') }}">Add one →</a></p>
+  {% endif %}
+</section>
+
+<!-- Skills table -->
+<section class="admin-section">
+  <h2>Skills</h2>
+  {% if skills %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr><th>Name</th><th>Category</th><th>Level</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for s in skills %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td><span class="badge">{{ s.category }}</span></td>
+          <td>{{ s.level }}%</td>
+          <td class="admin-table__actions">
+            <a href="{{ url_for('admin.edit_skill', sid=s.id) }}" class="btn btn--outline btn--xs">Edit</a>
+            <form method="POST" action="{{ url_for('admin.delete_skill', sid=s.id) }}" onsubmit="return confirm('Delete this skill?');" style="display:inline;">
+              <button type="submit" class="btn btn--danger btn--xs">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="admin-empty">No skills yet. <a href="{{ url_for('admin.new_skill') }}">Add one →</a></p>
+  {% endif %}
+</section>
+
+<!-- Messages -->
+<section class="admin-section">
+  <h2>Recent Messages</h2>
+  {% if messages %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr><th>From</th><th>Subject</th><th>Date</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for m in messages %}
+        <tr class="{% if not m.is_read %}admin-table__row--unread{% endif %}">
+          <td>{{ m.name }}<br><small>{{ m.email }}</small></td>
+          <td>{{ m.subject or '(no subject)' }}</td>
+          <td>{{ m.sent_at.strftime('%b %d, %Y') }}</td>
+          <td>{% if m.is_read %}<span class="badge">Read</span>{% else %}<span class="badge badge--green">New</span>{% endif %}</td>
+          <td>
+            {% if not m.is_read %}
+            <form method="POST" action="{{ url_for('admin.mark_read', mid=m.id) }}" style="display:inline;">
+              <button type="submit" class="btn btn--outline btn--xs">Mark Read</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="admin-empty">No messages yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

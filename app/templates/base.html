@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Surjith A P — Backend & AI Engineer{% endblock %}</title>
+  <meta name="description" content="Portfolio of Surjith A P — Backend Developer & AI Engineer based in Kerala, India." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- Mermaid (lazy-loaded only on /projects) -->
+  {% block head_extra %}{% endblock %}
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}" />
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────────── -->
+  <header class="site-header" id="site-header">
+    <nav class="nav container">
+      <a href="{{ url_for('main.index') }}" class="nav__logo">
+        <span class="nav__logo-bracket">{</span>SAP<span class="nav__logo-bracket">}</span>
+      </a>
+
+      <ul class="nav__links" id="nav-links">
+        <li><a href="{{ url_for('main.index') }}"    class="nav__link {% if request.endpoint == 'main.index' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('main.about') }}"   class="nav__link {% if request.endpoint == 'main.about' %}active{% endif %}">About</a></li>
+        <li><a href="{{ url_for('main.projects') }}" class="nav__link {% if request.endpoint == 'main.projects' %}active{% endif %}">Projects</a></li>
+        <li><a href="{{ url_for('main.contact') }}" class="nav__link {% if request.endpoint == 'main.contact' %}active{% endif %}">Contact</a></li>
+      </ul>
+
+      <!-- Mobile hamburger -->
+      <button class="nav__burger" id="nav-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ── Flash messages ─────────────────────────────────────────────── -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash--{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ── Page content ───────────────────────────────────────────────── -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">
+        Built with Flask &amp; SQLAlchemy by <strong>Surjith A P</strong>
+      </p>
+      <div class="footer__links">
+        <a href="https://linkedin.com/in/surjithap" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/surjithap" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:surjith.ap007@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Scripts ────────────────────────────────────────────────────── -->
+  <script src="{{ url_for('static', filename='js/gsap-init.js') }}" defer></script>
+  {% block scripts_extra %}{% endblock %}
+</body>
+</html>

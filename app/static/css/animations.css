@@ -1,0 +1,36 @@
+/* ============================================================
+   animations.css — GSAP target classes & initial states
+   GSAP sets opacity/transform on .reveal-up elements;
+   we only define their pre-animation resting state here so
+   there's no flash of unstyled content before JS loads.
+   ============================================================ */
+
+/* Elements that GSAP will animate from hidden → visible */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  /* GSAP ScrollTrigger overrides these on enter */
+}
+
+/* Skill bar fill starts at 0 — GSAP animates to --fill width */
+.skill-bar__fill {
+  width: 0 !important; /* override inline style; GSAP drives the value */
+}
+
+/* Hero copy lines are staggered by GSAP; hide initially */
+.hero__copy .reveal-up {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* No animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .skill-bar__fill {
+    width: var(--fill) !important;
+    transition: none !important;
+  }
+}

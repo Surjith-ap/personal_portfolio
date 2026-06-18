@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Surjith A P — Backend & AI Engineer{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ──────────────────────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="container hero__inner">
+
+    <div class="hero__terminal" id="hero-terminal">
+      <div class="terminal__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="terminal__title">surjith@portfolio ~ %</span>
+      </div>
+      <div class="terminal__body" id="terminal-body">
+        <!-- Lines injected by gsap-init.js boot sequence -->
+      </div>
+    </div>
+
+    <div class="hero__copy">
+      <p class="hero__eyebrow reveal-up">Hello, I'm</p>
+      <h1 class="hero__name reveal-up">Surjith A P</h1>
+      <p class="hero__tagline reveal-up">
+        Backend &amp; AI Engineer · Flask · Python · REST APIs
+      </p>
+      <div class="hero__cta reveal-up">
+        <a href="{{ url_for('main.projects') }}" class="btn btn--primary">View Projects</a>
+        <a href="{{ url_for('main.contact') }}"  class="btn btn--outline">Get in Touch</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Decorative blobs -->
+  <div class="hero__blob hero__blob--1" aria-hidden="true"></div>
+  <div class="hero__blob hero__blob--2" aria-hidden="true"></div>
+</section>
+
+
+<!-- ── Quick Stats ────────────────────────────────────────────────────── -->
+<section class="stats section-pad">
+  <div class="container stats__grid">
+    <div class="stat-card reveal-up">
+      <span class="stat-card__number">3+</span>
+      <span class="stat-card__label">Backend Projects</span>
+    </div>
+    <div class="stat-card reveal-up">
+      <span class="stat-card__number">1</span>
+      <span class="stat-card__label">Hackathon Win</span>
+    </div>
+    <div class="stat-card reveal-up">
+      <span class="stat-card__number">3</span>
+      <span class="stat-card__label">Certifications</span>
+    </div>
+    <div class="stat-card reveal-up">
+      <span class="stat-card__number">AI</span>
+      <span class="stat-card__label">Focused Stack</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── Featured Projects ──────────────────────────────────────────────── -->
+{% if featured %}
+<section class="section-pad" id="featured">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <h2 class="section-title">Featured Work</h2>
+      <p class="section-sub">Backend-focused projects with real architecture.</p>
+    </div>
+
+    <div class="project-grid">
+      {% for p in featured %}
+      <article class="project-card reveal-up">
+        <div class="project-card__header">
+          <h3 class="project-card__title">{{ p.title }}</h3>
+          <span class="project-card__role">{{ p.role }}</span>
+        </div>
+        <p class="project-card__desc">{{ p.description[:180] }}…</p>
+        <div class="project-card__tags">
+          {% for tech in p.tech_stack[:5] %}
+            <span class="tag">{{ tech }}</span>
+          {% endfor %}
+        </div>
+        {% if p.backend_metrics %}
+        <div class="project-card__metric">
+          <span class="metric-icon">⚡</span>
+          <p>{{ p.backend_metrics[:120] }}…</p>
+        </div>
+        {% endif %}
+        <div class="project-card__links">
+          <a href="{{ url_for('main.projects') }}#project-{{ p.id }}" class="link-arrow">Full Details →</a>
+          {% if p.github_url %}
+            <a href="{{ p.github_url }}" target="_blank" rel="noopener" class="link-subtle">GitHub ↗</a>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="center-cta reveal-up">
+      <a href="{{ url_for('main.projects') }}" class="btn btn--outline">All Projects →</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+<!-- ── Skills Snapshot ────────────────────────────────────────────────── -->
+<section class="section-pad bg-soft" id="skills-snap">
+  <div class="container">
+    <div class="section-header reveal-up">
+      <h2 class="section-title">Technical Skills</h2>
+      <p class="section-sub">What I reach for when building backend systems.</p>
+    </div>
+
+    {% for category, skills in skill_groups.items() %}
+    <div class="skill-row reveal-up">
+      <span class="skill-row__label">{{ category }}</span>
+      <div class="skill-row__chips">
+        {% for skill in skills %}
+          <span class="tag tag--skill">{{ skill.name }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="center-cta reveal-up">
+      <a href="{{ url_for('main.about') }}" class="btn btn--outline">Full Profile →</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── CTA Banner ─────────────────────────────────────────────────────── -->
+<section class="cta-banner reveal-up">
+  <div class="container cta-banner__inner">
+    <h2>Open to backend &amp; AI engineering roles.</h2>
+    <p>Final-year B.Tech CSE · Available immediately after September 2025.</p>
+    <a href="{{ url_for('main.contact') }}" class="btn btn--primary">Let's Talk</a>
+  </div>
+</section>
+
+{% endblock %}
