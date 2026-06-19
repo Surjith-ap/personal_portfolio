@@ -48,6 +48,7 @@ def validate_contact_form(name, email, subject, body):
     return True, None
 
 
+
 # ---------------------------------------------------------------------------
 # Home
 # ---------------------------------------------------------------------------
@@ -138,3 +139,11 @@ def contact():
         return redirect(url_for("main.contact"))
 
     return render_template("contact.html")
+
+
+# ---------------------------------------------------------------------------
+# Hear-Beat Monitoring ROute
+# ---------------------------------------------------------------------------
+@main_bp.route('/ping')
+def ping():
+    return "OK", 200
