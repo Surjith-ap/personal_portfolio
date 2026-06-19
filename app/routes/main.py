@@ -1,5 +1,6 @@
-import smtplib
-from email.message import EmailMessage
+import json
+from urllib import error as urllib_error
+from urllib import request as urllib_request
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from app import db
@@ -67,24 +68,35 @@ def contact():
         db.session.add(msg)
         db.session.commit()
 
-        # Send email notification with a short timeout so the request cannot hang.
+        # Send email notification via Resend over HTTPS so Render's SMTP block is avoided.
         try:
-            smtp_username = current_app.config.get("MAIL_USERNAME")
-            smtp_password = current_app.config.get("MAIL_PASSWORD")
-            mail_enabled = bool(smtp_username and smtp_password)
+            resend_api_key = current_app.config.get("RESEND_API_KEY")
+            resend_from_email = current_app.config.get("RESEND_FROM_EMAIL")
+            contact_recipient_email = current_app.config.get("CONTACT_RECIPIENT_EMAIL")
 
-            if mail_enabled:
-                email_msg = EmailMessage()
-                email_msg["Subject"] = f"[Portfolio] {subject}"
-                email_msg["From"] = current_app.config.get("MAIL_DEFAULT_SENDER") or smtp_username
-                email_msg["To"] = "surjith.ap007@gmail.com"
-                email_msg["Reply-To"] = email
-                email_msg.set_content(f"From: {name} <{email}>\n\n{body}")
+            if resend_api_key and resend_from_email and contact_recipient_email:
+                payload = {
+                    "from": resend_from_email,
+                    "to": [contact_recipient_email],
+                    "subject": f"[Portfolio] {subject}",
+                    "text": f"From: {name} <{email}>\n\n{body}",
+                    "reply_to": email,
+                }
 
-                with smtplib.SMTP("smtp.gmail.com", 587, timeout=8) as smtp:
-                    smtp.starttls()
-                    smtp.login(smtp_username, smtp_password)
-                    smtp.send_message(email_msg)
+                request = urllib_request.Request(
+                    "https://api.resend.com/emails",
+                    data=json.dumps(payload).encode("utf-8"),
+                    method="POST",
+                    headers={
+                        "Authorization": f"Bearer {resend_api_key}",
+                        "Content-Type": "application/json",
+                    },
+                )
+
+                with urllib_request.urlopen(request, timeout=8) as response:
+                    response.read()
+        except urllib_error.HTTPError as exc:
+            current_app.logger.warning("Contact email send failed: %s", exc.read().decode("utf-8", errors="ignore"))
         except Exception as exc:
             # Email failure is non-fatal; message is already in DB.
             current_app.logger.warning("Contact email send failed: %s", exc)

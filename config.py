@@ -7,13 +7,10 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback-change-in-production")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Flask-Mail
-    MAIL_SERVER = "smtp.gmail.com"
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
-    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_USERNAME")
+    # Resend (HTTP API, works on Render free tier)
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+    RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+    CONTACT_RECIPIENT_EMAIL = os.environ.get("CONTACT_RECIPIENT_EMAIL", "surjith.ap007@gmail.com")
 
     # Admin credentials (seeded once via `flask seed-admin`)
     ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
