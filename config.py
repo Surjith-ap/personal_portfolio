@@ -7,11 +7,8 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback-change-in-production")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Resend (HTTP API, works on Render free tier)
-    # RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
-    # RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
-    # CONTACT_RECIPIENT_EMAIL = os.environ.get("CONTACT_RECIPIENT_EMAIL", "surjith.ap007@gmail.com")
-    WEB3FORMS_ACCESS_KEY = os.environ.get("WEB3FORMS_ACCESS_KEY")
+    # Formspree (HTTP API, works on Render free tier)
+    FORMSPREE_FORM_ID = os.environ.get("FORMSPREE_FORM_ID")
 
     # Admin credentials (seeded once via `flask seed-admin`)
     ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")

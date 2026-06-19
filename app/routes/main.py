@@ -69,20 +69,24 @@ def contact():
         db.session.add(msg)
         db.session.commit()
 
-        # Send email notification via Web3Forms over HTTPS so Render's SMTP block is avoided.
+        # Send email notification via Formspree over HTTPS so Render's SMTP block is avoided.
         try:
-            web3forms_access_key = current_app.config.get("WEB3FORMS_ACCESS_KEY")
+            formspree_form_id = current_app.config.get("FORMSPREE_FORM_ID")
 
-            if web3forms_access_key:
+            if formspree_form_id:
                 payload = {
-                    "access_key": web3forms_access_key,
                     "name": name,
                     "email": email,
                     "subject": subject,
                     "message": body,
                 }
 
-                response = requests.post("https://api.web3forms.com/submit", data=payload, timeout=8)
+                response = requests.post(
+                    f"https://formspree.io/f/{formspree_form_id}",
+                    json=payload,
+                    headers={"Accept": "application/json"},
+                    timeout=8
+                )
                 response.raise_for_status()
         except requests.RequestException as exc:
             current_app.logger.warning("Contact email send failed: %s", exc)
