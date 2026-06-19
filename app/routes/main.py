@@ -83,7 +83,7 @@ def contact():
                     "reply_to": email,
                 }
 
-                request = urllib_request.Request(
+                http_request = urllib_request.Request(
                     "https://api.resend.com/emails",
                     data=json.dumps(payload).encode("utf-8"),
                     method="POST",
@@ -93,7 +93,7 @@ def contact():
                     },
                 )
 
-                with urllib_request.urlopen(request, timeout=8) as response:
+                with urllib_request.urlopen(http_request, timeout=8) as response:
                     response.read()
         except urllib_error.HTTPError as exc:
             current_app.logger.warning("Contact email send failed: %s", exc.read().decode("utf-8", errors="ignore"))
