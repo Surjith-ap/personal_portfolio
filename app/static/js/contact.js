@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    // Validate form before submission
+    if (!form.checkValidity()) {
+      feedback.textContent = "Please fill in all required fields correctly.";
+      feedback.className = "form-feedback form-feedback--error";
+      feedback.hidden = false;
+      return;
+    }
+
     const label   = submitBtn.querySelector(".btn__label");
     const loading = submitBtn.querySelector(".btn__loading");
 

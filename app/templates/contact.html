@@ -18,22 +18,22 @@
 
     <!-- Form -->
     <div class="contact-form-wrap reveal-up">
-      <form class="contact-form" id="contact-form" method="POST" action="{{ url_for('main.contact') }}" novalidate>
+      <form class="contact-form" id="contact-form" method="POST" action="{{ url_for('main.contact') }}">
         <div class="form-group">
           <label for="name">Name <span class="req">*</span></label>
-          <input type="text" id="name" name="name" placeholder="Your full name" required />
+          <input type="text" id="name" name="name" placeholder="Your full name" minlength="2" maxlength="100" pattern="^[a-zA-Z0-9\s.,'&-]+$" required />
         </div>
         <div class="form-group">
           <label for="email">Email <span class="req">*</span></label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+          <input type="email" id="email" name="email" placeholder="you@example.com" maxlength="254" required />
         </div>
         <div class="form-group">
           <label for="subject">Subject</label>
-          <input type="text" id="subject" name="subject" placeholder="What's this about?" />
+          <input type="text" id="subject" name="subject" placeholder="What's this about?" maxlength="200" />
         </div>
         <div class="form-group">
           <label for="body">Message <span class="req">*</span></label>
-          <textarea id="body" name="body" rows="6" placeholder="Write your message here…" required></textarea>
+          <textarea id="body" name="body" rows="6" placeholder="Write your message here…" minlength="10" maxlength="5000" required></textarea>
         </div>
         <button type="submit" class="btn btn--primary btn--full" id="submit-btn">
           <span class="btn__label">Send Message</span>
