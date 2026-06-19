@@ -8,9 +8,10 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Resend (HTTP API, works on Render free tier)
-    RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
-    RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
-    CONTACT_RECIPIENT_EMAIL = os.environ.get("CONTACT_RECIPIENT_EMAIL", "surjith.ap007@gmail.com")
+    # RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+    # RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+    # CONTACT_RECIPIENT_EMAIL = os.environ.get("CONTACT_RECIPIENT_EMAIL", "surjith.ap007@gmail.com")
+    WEB3FORMS_ACCESS_KEY = os.environ.get("WEB3FORMS_ACCESS_KEY")
 
     # Admin credentials (seeded once via `flask seed-admin`)
     ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")

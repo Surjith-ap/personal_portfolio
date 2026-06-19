@@ -1,4 +1,5 @@
 import json
+import requests
 from urllib import error as urllib_error
 from urllib import request as urllib_request
 
@@ -68,35 +69,23 @@ def contact():
         db.session.add(msg)
         db.session.commit()
 
-        # Send email notification via Resend over HTTPS so Render's SMTP block is avoided.
+        # Send email notification via Web3Forms over HTTPS so Render's SMTP block is avoided.
         try:
-            resend_api_key = current_app.config.get("RESEND_API_KEY")
-            resend_from_email = current_app.config.get("RESEND_FROM_EMAIL")
-            contact_recipient_email = current_app.config.get("CONTACT_RECIPIENT_EMAIL")
+            web3forms_access_key = current_app.config.get("WEB3FORMS_ACCESS_KEY")
 
-            if resend_api_key and resend_from_email and contact_recipient_email:
+            if web3forms_access_key:
                 payload = {
-                    "from": resend_from_email,
-                    "to": [contact_recipient_email],
-                    "subject": f"[Portfolio] {subject}",
-                    "text": f"From: {name} <{email}>\n\n{body}",
-                    "reply_to": email,
+                    "access_key": web3forms_access_key,
+                    "name": name,
+                    "email": email,
+                    "subject": subject,
+                    "message": body,
                 }
 
-                http_request = urllib_request.Request(
-                    "https://api.resend.com/emails",
-                    data=json.dumps(payload).encode("utf-8"),
-                    method="POST",
-                    headers={
-                        "Authorization": f"Bearer {resend_api_key}",
-                        "Content-Type": "application/json",
-                    },
-                )
-
-                with urllib_request.urlopen(http_request, timeout=8) as response:
-                    response.read()
-        except urllib_error.HTTPError as exc:
-            current_app.logger.warning("Contact email send failed: %s", exc.read().decode("utf-8", errors="ignore"))
+                response = requests.post("https://api.web3forms.com/submit", data=payload, timeout=8)
+                response.raise_for_status()
+        except requests.RequestException as exc:
+            current_app.logger.warning("Contact email send failed: %s", exc)
         except Exception as exc:
             # Email failure is non-fatal; message is already in DB.
             current_app.logger.warning("Contact email send failed: %s", exc)
