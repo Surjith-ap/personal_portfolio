@@ -1,4 +1,5 @@
 import json
+import re
 import requests
 from urllib import error as urllib_error
 from urllib import request as urllib_request
@@ -8,6 +9,43 @@ from app import db
 from app.models import Project, Skill, Message
 
 main_bp = Blueprint("main", __name__)
+
+
+# -------
+# Helpers
+# -------
+
+def validate_contact_form(name, email, subject, body):
+    """
+    Validate contact form fields against industry-standard rules.
+    Returns (is_valid: bool, error_message: str or None)
+    """
+    # Name validation: required, 2-100 characters, alphanumeric + common chars
+    if not name or len(name) < 2:
+        return False, "Name must be at least 2 characters."
+    if len(name) > 100:
+        return False, "Name must be 100 characters or fewer."
+    if not re.match(r"^[a-zA-Z0-9\s.,'&-]+$", name):
+        return False, "Name contains invalid characters."
+
+    # Email validation: RFC 5322 simplified pattern
+    email_pattern = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+    if not re.match(email_pattern, email):
+        return False, "Please provide a valid email address."
+    if len(email) > 254:
+        return False, "Email address is too long."
+
+    # Subject validation: optional, but if provided max 200 characters
+    if subject and len(subject) > 200:
+        return False, "Subject must be 200 characters or fewer."
+
+    # Message validation: required, 10-5000 characters
+    if not body or len(body) < 10:
+        return False, "Message must be at least 10 characters."
+    if len(body) > 5000:
+        return False, "Message must be 5000 characters or fewer."
+
+    return True, None
 
 
 # ---------------------------------------------------------------------------
@@ -60,8 +98,10 @@ def contact():
         subject = request.form.get("subject", "Portfolio Inquiry").strip()
         body    = request.form.get("body", "").strip()
 
-        if not all([name, email, body]):
-            flash("Please fill in all required fields.", "error")
+        # Validate form data
+        is_valid, error_msg = validate_contact_form(name, email, subject, body)
+        if not is_valid:
+            flash(error_msg, "error")
             return redirect(url_for("main.contact"))
 
         # Persist message to DB
