@@ -34,23 +34,3 @@
     transition: none !important;
   }
 }
-
-
-
-/* New Changes Added */
-
-/* ═════════════════════════════════════════════════════════════
-   PROJECT CARD INITIAL STATE (GSAP will animate from this)
-   ═════════════════════════════════════════════════════════════ */
-.project-card {
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-/* When JS is disabled or reduced motion, show immediately */
-@media (prefers-reduced-motion: reduce) {
-  .project-card {
-    opacity: 1;
-    transform: none;
-  }
-}
