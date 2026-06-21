@@ -161,3 +161,64 @@ code {
 
 /* Offset body for fixed header */
 main { padding-top: 64px; }
+
+
+
+
+/* New Changes added */
+
+/* ═════════════════════════════════════════════════════════════
+   NAV HIDE/SHOW ANIMATION
+   ═════════════════════════════════════════════════════════════ */
+.site-header {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow var(--transition);
+}
+
+.site-header.nav--hidden {
+  transform: translateY(-100%);
+}
+
+/* ═════════════════════════════════════════════════════════════
+   HAMBURGER X ANIMATION
+   ═════════════════════════════════════════════════════════════ */
+.nav__burger span {
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.nav__burger--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav__burger--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__burger--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ═════════════════════════════════════════════════════════════
+   HERO TERMINAL 3D CONTAINER
+   ═════════════════════════════════════════════════════════════ */
+.hero__terminal {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   TERMINAL FLOATING ANIMATION (subtle)
+   ═════════════════════════════════════════════════════════════ */
+@keyframes terminalFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.hero__terminal {
+  animation: terminalFloat 5s ease-in-out infinite;
+}
+
+/* Pause float when user is interacting */
+.hero:hover .hero__terminal {
+  animation-play-state: paused;
+}
